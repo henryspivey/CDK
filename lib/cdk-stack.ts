@@ -1,19 +1,13 @@
-import { Duration, Stack, StackProps } from 'aws-cdk-lib';
-import * as sns from 'aws-cdk-lib/aws-sns';
-import * as subs from 'aws-cdk-lib/aws-sns-subscriptions';
-import * as sqs from 'aws-cdk-lib/aws-sqs';
-import { Construct } from 'constructs';
-
-export class CdkStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+import * as cdk from 'aws-cdk-lib';
+import { aws_lambda as lambda } from 'aws-cdk-lib';
+export class CdkWorkshopStack extends cdk.Stack {
+  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const queue = new sqs.Queue(this, 'CdkQueue', {
-      visibilityTimeout: Duration.seconds(300)
-    });
-
-    const topic = new sns.Topic(this, 'CdkTopic');
-
-    topic.addSubscription(new subs.SqsSubscription(queue));
+    const hello = new lambda.Function(this, "lambdaId", {
+      runtime: lambda.Runtime.NODEJS_16_X,
+      code: lambda.Code.fromAsset('lambda'),
+      handler: "hello.handler",
+    })
   }
 }
