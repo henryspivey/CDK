@@ -2,6 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 
 import { aws_lambda as lambda, aws_apigateway as apigw } from 'aws-cdk-lib';
 import { HitCounter } from './hitcounter';
+import { TableViewer } from 'cdk-dynamo-table-viewer';
 
 export class CdkWorkshopStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -21,6 +22,10 @@ export class CdkWorkshopStack extends cdk.Stack {
       handler: helloWithCounter.handler
     })
 
+    new TableViewer(this, 'ViewHitCounter', {
+      title: 'Hello hits',
+      table: helloWithCounter.table
+    })
 
   }
 }
