@@ -1,6 +1,7 @@
 const { DynamoDB, Lambda } = require('aws-sdk');
+import { EventWithPath } from "./helpers";
 
-exports.handler = async function (event) {
+exports.handler = async function (event: EventWithPath) {
     console.log("request", JSON.stringify(event, undefined, 2));
 
     // create AWS SDK clients
@@ -9,7 +10,7 @@ exports.handler = async function (event) {
 
     await dynamo.updateItem({
         TableName: process.env.HITS_TABLE_NAME,
-        Key: { path: { S: event.path } },
+        Key: { path: { S: event.target.path } },
         UpdateExpression: 'Add hits :incr',
         ExpressionAttributeValues: { ':incr': { N: '1' } }
     }).promise();
